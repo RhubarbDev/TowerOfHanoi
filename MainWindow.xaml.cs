@@ -11,13 +11,11 @@ namespace TowerOfHanoi
         const int blocks = 8;
         private readonly Random rand = new Random();
         public static bool selected = false;
-        public static int RectangleMargin { get; set; }
         public MainWindow()
         {
             InitializeComponent();
             Loaded += delegate
             {
-                RectangleMargin = ((int)Left.ActualWidth - (blocks * 20)) / 2;
                 for (int i = blocks; i > 0; i--)
                 {
                     AddBlock(i, Left);
@@ -34,7 +32,8 @@ namespace TowerOfHanoi
                 selected = true;
                 Rectangle rect = canvas.Children[canvas.Children.Count - 1] as Rectangle;
                 canvas.Children.Remove(rect);
-                Canvas.SetTop(rect, 0);
+                Canvas.SetTop(rect, (Select.ActualHeight - rect.Height) / 2);
+                Canvas.SetLeft(rect, (Select.ActualWidth - rect.Width) / 2);
                 Select.Children.Add(rect);
             }
             else if (selected)
@@ -44,6 +43,7 @@ namespace TowerOfHanoi
                 {
                     Select.Children.RemoveAt(0);
                     Canvas.SetTop(rect, (blocks - canvas.Children.Count) * 25);
+                    Canvas.SetLeft(rect, ((blocks - (rect.Width / 20)) * 10) + (int)(canvas.ActualWidth - (blocks * 20)) / 2);
                     canvas.Children.Add(rect);
                     selected = false;
                     CheckWin();
@@ -72,7 +72,7 @@ namespace TowerOfHanoi
                 Height = 25,
                 Fill = new SolidColorBrush(Color.FromRgb((byte)rand.Next(255), (byte)rand.Next(255), (byte)rand.Next(255)))
             };
-            Canvas.SetLeft(rect, ((blocks - size) * 10) + RectangleMargin);
+            Canvas.SetLeft(rect, ((blocks - size) * 10) + (int)(canvas.ActualWidth - (blocks * 20)) / 2);
             Canvas.SetTop(rect, size * 25);
             canvas.Children.Add(rect);
         }

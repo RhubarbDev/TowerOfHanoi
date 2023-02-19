@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TowerOfHanoi"
         mc:Ignorable="d"
-        Title="TowerOfHanoi" Height="450" Width="800">
+        Title="TowerOfHanoi" Height="450" Width="800" Background="LightGray">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="25"/>
@@ -20,12 +20,12 @@
             <RowDefinition Height="9*"/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <Canvas Grid.Column="1" Grid.Row="2" Name="Left" Margin="12.5"/>
-        <Canvas Grid.Column="2" Grid.Row="2" Name="Middle" Margin="12.5"/>
-        <Canvas Grid.Column="3" Grid.Row="2" Name="Right" Margin="12.5"/>
+        <Canvas Grid.Column="1" Grid.Row="2" Name="Left" Background="White" Margin="12.5"/>
+        <Canvas Grid.Column="2" Grid.Row="2" Name="Middle" Background="White" Margin="12.5"/>
+        <Canvas Grid.Column="3" Grid.Row="2" Name="Right" Background="White" Margin="12.5"/>
         <Button Grid.Column="1" Grid.Row="2" Name="LButton" Margin="12.5" FontSize="25" Click="Button_Click" Opacity="0"/>
         <Button Grid.Column="2" Grid.Row="2" Name="MButton" Margin="12.5" FontSize="25" Click="Button_Click" Opacity="0"/>
         <Button Grid.Column="3" Grid.Row="2" Name="RButton" Margin="12.5" FontSize="25" Click="Button_Click" Opacity="0"/>
-        <Canvas Grid.Column="2" Grid.Row="1" Name="Select" Margin="12.5"/>
+        <Canvas Grid.Column="2" Grid.Row="1" Name="Select" Background="White"/>
     </Grid>
 </Window>
