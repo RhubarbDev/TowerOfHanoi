@@ -16,17 +16,16 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
-            <RowDefinition Height="7*"/>
-            <RowDefinition Height="2*"/>
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="9*"/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <Canvas Grid.Column="1" Grid.Row="1" Name="Left" Margin="12.5"/>
-        <Canvas Grid.Column="2" Grid.Row="1" Name="Middle" Margin="12.5"/>
-        <Canvas Grid.Column="3" Grid.Row="1" Name="Right" Margin="12.5"/>
-        <Button Grid.Column="1" Grid.Row="2" Name="LButton" Margin="12.5" Content="Add" FontSize="25" Click="Button_Click" IsEnabled="False"/>
-        <Button Grid.Column="2" Grid.Row="2" Name="MButton" Margin="12.5" Content="Add" FontSize="25" Click="Button_Click" IsEnabled="False"/>
-        <Button Grid.Column="3" Grid.Row="2" Name="RButton" Margin="12.5" Content="Add" FontSize="25" Click="Button_Click" IsEnabled="False"/>
-        <Canvas Grid.Column="2" Grid.Row="3" Name="Select" Margin="12.5"/>
+        <Canvas Grid.Column="1" Grid.Row="2" Name="Left" Margin="12.5"/>
+        <Canvas Grid.Column="2" Grid.Row="2" Name="Middle" Margin="12.5"/>
+        <Canvas Grid.Column="3" Grid.Row="2" Name="Right" Margin="12.5"/>
+        <Button Grid.Column="1" Grid.Row="2" Name="LButton" Margin="12.5" FontSize="25" Click="Button_Click" Opacity="0"/>
+        <Button Grid.Column="2" Grid.Row="2" Name="MButton" Margin="12.5" FontSize="25" Click="Button_Click" Opacity="0"/>
+        <Button Grid.Column="3" Grid.Row="2" Name="RButton" Margin="12.5" FontSize="25" Click="Button_Click" Opacity="0"/>
+        <Canvas Grid.Column="2" Grid.Row="1" Name="Select" Margin="12.5"/>
     </Grid>
 </Window>
