@@ -56,8 +56,6 @@ namespace TowerOfHanoi
             if(Right.Children.Count == blocks)
             {
                 MessageBox.Show("You Win!");
-                Left.Children.Clear();
-                Middle.Children.Clear();
                 Right.Children.Clear();
                 for (int i = blocks; i > 0; i--)
                 {
