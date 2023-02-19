@@ -14,7 +14,7 @@ namespace TowerOfHanoi
     /// 
     public partial class MainWindow : Window
     {
-        const int blocks = 4;
+        const int blocks = 8;
         private readonly Random rand = new Random();
         public static bool selected = false;
         public static int RectangleMargin { get; set; }
