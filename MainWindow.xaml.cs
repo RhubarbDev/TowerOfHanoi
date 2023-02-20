@@ -8,7 +8,7 @@ namespace TowerOfHanoi
 {
     public partial class MainWindow : Window
     {
-        const int blocks = 8;
+        public static int blocks = 8;
         private readonly Random rand = new Random();
         public static bool selected = false;
         public MainWindow()
@@ -16,12 +16,8 @@ namespace TowerOfHanoi
             InitializeComponent();
             Loaded += delegate
             {
-                for (int i = blocks; i > 0; i--)
-                {
-                    AddBlock(i, Left);
-                }
+                StartGame();
             };
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -39,7 +35,7 @@ namespace TowerOfHanoi
             else if (selected)
             {
                 Rectangle rect = Select.Children[0] as Rectangle;
-                if (canvas.Children.Count == 0 || (canvas.Children[canvas.Children.Count - 1] as Rectangle).Width > rect.Width)
+                if (ValidPosition(canvas, rect))
                 {
                     Select.Children.RemoveAt(0);
                     Canvas.SetTop(rect, (blocks - canvas.Children.Count) * 25);
@@ -57,10 +53,7 @@ namespace TowerOfHanoi
             {
                 MessageBox.Show("You Win!");
                 Right.Children.Clear();
-                for (int i = blocks; i > 0; i--)
-                {
-                    AddBlock(i, Left);
-                }
+                StartGame();
             }
         }
 
@@ -75,6 +68,54 @@ namespace TowerOfHanoi
             Canvas.SetLeft(rect, ((blocks - size) * 10) + (int)(canvas.ActualWidth - (blocks * 20)) / 2);
             Canvas.SetTop(rect, size * 25);
             canvas.Children.Add(rect);
+        }
+
+        private void Reset_Click(object sender, RoutedEventArgs e)
+        {
+            ResetBlocks();
+            StartGame();
+        }
+
+        private bool ValidPosition(Canvas target, Rectangle rect)
+        {
+            if(target.Children.Count == 0 || (target.Children[target.Children.Count - 1] as Rectangle).Width > rect.Width)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private void ResetBlocks()
+        {
+            Left.Children.Clear();
+            Middle.Children.Clear();
+            Right.Children.Clear();
+            Select.Children.Clear();
+        }
+
+        private void StartGame()
+        {
+            for (int i = blocks; i > 0; i--)
+            {
+                AddBlock(i, Left);
+            }
+        }
+
+        private void Increase_Click(object sender, RoutedEventArgs e)
+        {
+            ResetBlocks();
+            blocks++;
+            StartGame();
+        }
+
+        private void Decrease_Click(object sender, RoutedEventArgs e)
+        {
+            if (blocks > 1)
+            {
+                ResetBlocks();
+                blocks--;
+                StartGame();
+            }
         }
     }
 }
