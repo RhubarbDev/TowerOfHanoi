@@ -44,9 +44,7 @@ namespace TowerOfHanoi
                 selected = true;
                 Rectangle rect = canvas.Children[canvas.Children.Count - 1] as Rectangle;
                 canvas.Children.Remove(rect);
-                Canvas.SetTop(rect, (Select.ActualHeight - rect.Height) / 2);
-                Canvas.SetLeft(rect, (Select.ActualWidth - rect.Width) / 2);
-                Select.Children.Add(rect);
+                AddBlock(Select, rect, null, rect.ActualWidth, rect.ActualHeight);
             }
             else if (selected)
             {
@@ -71,12 +69,12 @@ namespace TowerOfHanoi
             }
         }
 
-        private void AddBlock(Canvas canvas, Rectangle rectangle, int? s, int width, int height)
+        private void AddBlock(Canvas canvas, Rectangle rectangle, int? s, double width, double height)
         {
             int size;
             if (s == null)
             {
-                size = (int) (rectangle.Width / width);
+                size = (int)rectangle.Tag;
             }
             else
             {
@@ -92,8 +90,16 @@ namespace TowerOfHanoi
                     Tag = size
                 };
             }
-            Canvas.SetTop(rectangle, (blocks - canvas.Children.Count) * height);
-            Canvas.SetLeft(rectangle, ((blocks - size) * (width / 2)) + (int)(canvas.ActualWidth - (blocks * width)) / 2);
+            if (canvas == Select)
+            {
+                Canvas.SetTop(rectangle, (Select.ActualHeight - rectangle.Height) / 2);
+                Canvas.SetLeft(rectangle, (Select.ActualWidth - rectangle.Width) / 2);
+            }
+            else
+            {
+                Canvas.SetTop(rectangle, (blocks - canvas.Children.Count) * height);
+                Canvas.SetLeft(rectangle, ((blocks - size) * (width / 2)) + (int)(canvas.ActualWidth - (blocks * width)) / 2);
+            }
             canvas.Children.Add(rectangle);
         }
 
@@ -157,13 +163,15 @@ namespace TowerOfHanoi
         void resizeTimer_Tick(object sender, EventArgs e)
         {
             resizeTimer.IsEnabled = false;
-            ResizeBlocks(Left);
-            ResizeBlocks(Middle);
-            ResizeBlocks(Right);
-            ResizeBlocks(Select);
+            int width = CalculateWidth(Left); // Left Middle Right should always be the same
+            int height = CalculateHeight(Left);
+            ResizeBlocks(Left, width, height);
+            ResizeBlocks(Middle, width, height);
+            ResizeBlocks(Right, width, height);
+            ResizeBlocks(Select, width, height);
         }
 
-        void ResizeBlocks(Canvas canvas)
+        void ResizeBlocks(Canvas canvas, int width, int height)
         {
             List<Rectangle> rectangles = new List<Rectangle>();
             foreach (Rectangle rectangle in canvas.Children)
@@ -173,8 +181,6 @@ namespace TowerOfHanoi
             canvas.Children.Clear();
             foreach(Rectangle rectangle in rectangles)
             {
-                int width = CalculateWidth(canvas);
-                int height = CalculateHeight(canvas);
                 rectangle.Width = (int)rectangle.Tag * width;
                 rectangle.Height = height;
                 AddBlock(canvas, rectangle, null, width, height);
