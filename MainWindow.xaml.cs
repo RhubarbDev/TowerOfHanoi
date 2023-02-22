@@ -14,7 +14,7 @@ namespace TowerOfHanoi
         private readonly Random rand = new Random();
         public static bool selected = false;
         readonly DispatcherTimer resizeTimer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 0, 0, 0), IsEnabled = false };
-    public MainWindow()
+        public MainWindow()
         {
             resizeTimer.Tick += resizeTimer_Tick;
             InitializeComponent();
@@ -36,15 +36,15 @@ namespace TowerOfHanoi
             return height;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Canvas canvas = sender == RButton ? Right : (sender == MButton ? Middle : Left);
+            Canvas canvas = sender as Canvas;
             if (!selected && canvas.Children.Count > 0)
             {
                 selected = true;
                 Rectangle rect = canvas.Children[canvas.Children.Count - 1] as Rectangle;
                 canvas.Children.Remove(rect);
-                AddBlock(Select, rect, null, rect.ActualWidth, rect.ActualHeight);
+                AddBlock(Select, rect, null, 0, 0);
             }
             else if (selected)
             {
@@ -54,7 +54,7 @@ namespace TowerOfHanoi
                     Select.Children.RemoveAt(0);
                     AddBlock(canvas, rect, null, CalculateWidth(canvas), CalculateHeight(canvas));
                     selected = false;
-                    CheckWin(); 
+                    CheckWin();
                 }
             }
         }
@@ -163,7 +163,7 @@ namespace TowerOfHanoi
         void resizeTimer_Tick(object sender, EventArgs e)
         {
             resizeTimer.IsEnabled = false;
-            int width = CalculateWidth(Left); // Left Middle Right should always be the same
+            int width = CalculateWidth(Left);
             int height = CalculateHeight(Left);
             ResizeBlocks(Left, width, height);
             ResizeBlocks(Middle, width, height);
