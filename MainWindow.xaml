@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         SizeChanged="Window_SizeChanged"
-        Title="TowerOfHanoi" Height="450" Width="800" Background="LightGray">
+        Title="Tower Of Hanoi" Height="450" Width="800" Background="LightGray">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="12.5"/>

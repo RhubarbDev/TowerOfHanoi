@@ -119,6 +119,7 @@ namespace TowerOfHanoi
             {
                 AddBlock(Left, null, i, width, height);
             }
+            this.Title = "Tower Of Hanoi - Minimum Moves: " + (Math.Pow(2, blocks) - 1);
         }
 
         private void Increase_Click(object sender, RoutedEventArgs e)
