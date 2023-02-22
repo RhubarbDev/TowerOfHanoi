@@ -15,10 +15,7 @@ namespace TowerOfHanoi
         public MainWindow()
         {
             InitializeComponent();
-            Loaded += delegate
-            {
-                StartGame();
-            };
+            StartGame();
         }
 
         private int CalculateWidth(Canvas canvas)
