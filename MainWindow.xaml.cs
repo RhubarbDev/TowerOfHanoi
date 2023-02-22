@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace TowerOfHanoi
 {
@@ -11,13 +13,27 @@ namespace TowerOfHanoi
         public static int blocks = 8;
         private readonly Random rand = new Random();
         public static bool selected = false;
-        public MainWindow()
+        readonly DispatcherTimer resizeTimer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 0, 0, 0), IsEnabled = false };
+    public MainWindow()
         {
+            resizeTimer.Tick += resizeTimer_Tick;
             InitializeComponent();
             Loaded += delegate
             {
                 StartGame();
             };
+        }
+
+        private int CalculateWidth(Canvas canvas)
+        {
+            int width = (int)(canvas.ActualWidth / (blocks + 4));
+            return width;
+        }
+
+        private int CalculateHeight(Canvas canvas)
+        {
+            int height = (int)(canvas.ActualHeight/ (blocks + 2));
+            return height;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -38,11 +54,9 @@ namespace TowerOfHanoi
                 if (ValidPosition(canvas, rect))
                 {
                     Select.Children.RemoveAt(0);
-                    Canvas.SetTop(rect, (blocks - canvas.Children.Count) * 25);
-                    Canvas.SetLeft(rect, ((blocks - (rect.Width / 20)) * 10) + (int)(canvas.ActualWidth - (blocks * 20)) / 2);
-                    canvas.Children.Add(rect);
+                    AddBlock(canvas, rect, null, CalculateWidth(canvas), CalculateHeight(canvas));
                     selected = false;
-                    CheckWin();
+                    CheckWin(); 
                 }
             }
         }
@@ -57,17 +71,30 @@ namespace TowerOfHanoi
             }
         }
 
-        private void AddBlock(int size, Canvas canvas)
+        private void AddBlock(Canvas canvas, Rectangle rectangle, int? s, int width, int height)
         {
-            Rectangle rect = new Rectangle
+            int size;
+            if (s == null)
             {
-                Width = size * 20,
-                Height = 25,
-                Fill = new SolidColorBrush(Color.FromRgb((byte)rand.Next(255), (byte)rand.Next(255), (byte)rand.Next(255)))
-            };
-            Canvas.SetLeft(rect, ((blocks - size) * 10) + (int)(canvas.ActualWidth - (blocks * 20)) / 2);
-            Canvas.SetTop(rect, size * 25);
-            canvas.Children.Add(rect);
+                size = (int) (rectangle.Width / width);
+            }
+            else
+            {
+                size = s.Value;
+            }
+            if (rectangle == null)
+            {
+                rectangle = new Rectangle
+                {
+                    Width = size * width,
+                    Height = height,
+                    Fill = new SolidColorBrush(Color.FromRgb((byte)rand.Next(255), (byte)rand.Next(255), (byte)rand.Next(255))),
+                    Tag = size
+                };
+            }
+            Canvas.SetTop(rectangle, (blocks - canvas.Children.Count) * height);
+            Canvas.SetLeft(rectangle, ((blocks - size) * (width / 2)) + (int)(canvas.ActualWidth - (blocks * width)) / 2);
+            canvas.Children.Add(rectangle);
         }
 
         private void Reset_Click(object sender, RoutedEventArgs e)
@@ -78,7 +105,7 @@ namespace TowerOfHanoi
 
         private bool ValidPosition(Canvas target, Rectangle rect)
         {
-            if(target.Children.Count == 0 || (target.Children[target.Children.Count - 1] as Rectangle).Width > rect.Width)
+            if(target.Children.Count == 0 || (int)(target.Children[target.Children.Count - 1] as Rectangle).Tag > (int)rect.Tag)
             {
                 return true;
             }
@@ -95,9 +122,11 @@ namespace TowerOfHanoi
 
         private void StartGame()
         {
+            int width = CalculateWidth(Left);
+            int height = CalculateHeight(Left);
             for (int i = blocks; i > 0; i--)
             {
-                AddBlock(i, Left);
+                AddBlock(Left, null, i, width, height);
             }
         }
 
@@ -115,6 +144,40 @@ namespace TowerOfHanoi
                 ResetBlocks();
                 blocks--;
                 StartGame();
+            }
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            resizeTimer.IsEnabled = true;
+            resizeTimer.Stop();
+            resizeTimer.Start();
+        }
+
+        void resizeTimer_Tick(object sender, EventArgs e)
+        {
+            resizeTimer.IsEnabled = false;
+            ResizeBlocks(Left);
+            ResizeBlocks(Middle);
+            ResizeBlocks(Right);
+            ResizeBlocks(Select);
+        }
+
+        void ResizeBlocks(Canvas canvas)
+        {
+            List<Rectangle> rectangles = new List<Rectangle>();
+            foreach (Rectangle rectangle in canvas.Children)
+            {
+                rectangles.Add(rectangle);
+            }
+            canvas.Children.Clear();
+            foreach(Rectangle rectangle in rectangles)
+            {
+                int width = CalculateWidth(canvas);
+                int height = CalculateHeight(canvas);
+                rectangle.Width = (int)rectangle.Tag * width;
+                rectangle.Height = height;
+                AddBlock(canvas, rectangle, null, width, height);
             }
         }
     }
