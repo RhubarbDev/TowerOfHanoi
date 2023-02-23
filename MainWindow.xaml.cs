@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -120,6 +122,9 @@ namespace TowerOfHanoi
                 AddBlock(Left, null, i, width, height);
             }
             this.Title = "Tower Of Hanoi - Minimum Moves: " + (Math.Pow(2, blocks) - 1);
+            Solve.IsEnabled = true;
+            Increase.IsEnabled = true;
+            Decrease.IsEnabled = true;
         }
 
         private void Increase_Click(object sender, RoutedEventArgs e)
@@ -163,6 +168,49 @@ namespace TowerOfHanoi
                 rectangle.Height = height;
                 AddBlock(canvas, rectangle, (int)rectangle.Tag, width, height);
             }
+        }
+
+        private async void Solve_Click(object sender, RoutedEventArgs e)
+        {
+            Solve.IsEnabled = false;
+            Increase.IsEnabled= false;
+            Decrease.IsEnabled= false;
+            while(Right.Children.Count != blocks)
+            {
+                if (blocks % 2 == 0)
+                {
+                    await MakeMove(Left, Middle);
+                    await MakeMove(Left, Right);
+                }
+                else
+                {
+                    await MakeMove(Left, Right);
+                    await MakeMove(Left, Middle);
+                }
+                await MakeMove(Middle, Right);
+            }
+            CheckWin();
+        }
+
+        public async Task MakeMove(Canvas oldCanvas, Canvas newCanvas)
+        {
+            Rectangle rectangle;
+            Canvas fromCanvas;
+            Canvas toCanvas;
+            if(oldCanvas.Children.Count > 0 && ValidPosition(newCanvas, (oldCanvas.Children[oldCanvas.Children.Count - 1] as Rectangle)))
+            {
+                fromCanvas = oldCanvas;
+                toCanvas = newCanvas;
+            }
+            else
+            {
+                fromCanvas = newCanvas;
+                toCanvas = oldCanvas;
+            }
+            rectangle = fromCanvas.Children[fromCanvas.Children.Count - 1] as Rectangle;
+            fromCanvas.Children.Remove(rectangle);
+            AddBlock(toCanvas, rectangle, (int)rectangle.Tag, CalculateWidth(toCanvas), CalculateHeight(toCanvas));
+            await Task.Delay(100);
         }
     }
 }

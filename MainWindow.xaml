@@ -26,12 +26,19 @@
         <Canvas Grid.Column="2" Grid.Row="1" Name="Select" Margin="12.5" Background="White"/>
         <Button Grid.Column="1" Grid.Row="1" Content="Reset" Margin="12.5" Background="White" Click="Reset_Click"/>
         <Grid Grid.Column="3" Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Margin="12.5" Background="White" Content="Increase" Click="Increase_Click"/>
-            <Button Grid.Column="1" Margin="12.5" Background="White" Content="Decrease" Click="Decrease_Click"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Margin="12.5, 12.5, 12.5, 0" Background="White" Content="Solve" Click="Solve_Click" Name="Solve"/>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Margin="12.5, 0, 0, 12.5" Background="White" Content="Increase" Click="Increase_Click" Name="Increase"/>
+                <Button Grid.Column="1" Margin="0, 0, 12.5, 12.5" Background="White" Content="Decrease" Click="Decrease_Click" Name="Decrease"/>
+            </Grid>
         </Grid>
     </Grid>
 </Window>
